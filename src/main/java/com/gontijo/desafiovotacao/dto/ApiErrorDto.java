@@ -1,12 +1,11 @@
-package com.gontijo.desafiovotacao.error;
+package com.gontijo.desafiovotacao.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ApiError {
+public class ApiErrorDto {
 
     private String message;
-
 }

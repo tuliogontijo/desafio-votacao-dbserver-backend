@@ -1,5 +1,6 @@
 package com.gontijo.desafiovotacao.error;
 
+import com.gontijo.desafiovotacao.dto.ApiErrorDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,32 @@ public class ErrorHandler {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
 
+        log.error(errors.toString(), ex);
+
         return new ResponseEntity<>(errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoudException.class)
+    public ResponseEntity<ApiErrorDto> handleResourceNotFoudException(ResourceNotFoudException ex) {
+
+        log.error(ex.getMessage(), ex);
+
+        var apiError = ApiErrorDto.builder()
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.badRequest().body(apiError);
+    }
+
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity<ApiErrorDto> handleUnprocessableEntityException(UnprocessableEntityException ex) {
+
+        log.error(ex.getMessage(), ex);
+
+        var apiError = ApiErrorDto.builder()
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.unprocessableEntity().body(apiError);
     }
 }
