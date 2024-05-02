@@ -47,6 +47,8 @@ public class VotoService {
 
     public Resultado consultarResultadoVotacaoPauta(Long id) {
 
+        var pauta = pautaRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoudException(MessageFormat.format("Pauta com o ID:{0} não encontrada", id.toString())));
         var votosSim = votoRepository.findByPautaIdAndVote(id, YES.getVote()).size();
         var votosNao = votoRepository.findByPautaIdAndVote(id, NO.getVote()).size();
 
