@@ -3,6 +3,7 @@ package com.gontijo.desafiovotacao.service;
 import com.gontijo.desafiovotacao.dto.VotoMapper;
 import com.gontijo.desafiovotacao.error.ResourceNotFoudException;
 import com.gontijo.desafiovotacao.error.UnprocessableEntityException;
+import com.gontijo.desafiovotacao.model.Pauta;
 import com.gontijo.desafiovotacao.model.Resultado;
 import com.gontijo.desafiovotacao.model.Voto;
 import com.gontijo.desafiovotacao.repository.PautaRepository;
@@ -40,19 +41,27 @@ public class VotoService {
             throw new UnprocessableEntityException(MessageFormat.format("A sessão da pauta com ID:{0} já foi fechada em {1}", id, expiration.toLocalDate().toString()));
         }
 
+        this.validaCPF(voto.getCpf(), pauta);
+
         voto.setCreatedAt(LocalDateTime.now());
         voto.setPauta(pauta);
         return votoRepository.save(voto);
     }
 
     public Resultado consultarResultadoVotacaoPauta(Long id) {
-
-        var pauta = pautaRepository.findById(id).orElseThrow(() ->
+        pautaRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoudException(MessageFormat.format("Pauta com o ID:{0} não encontrada", id.toString())));
-        var votosSim = votoRepository.findByPautaIdAndVote(id, YES.getVote()).size();
-        var votosNao = votoRepository.findByPautaIdAndVote(id, NO.getVote()).size();
+
+        var votosSim = votoRepository.findByPautaIdAndVote(id, YES.name()).size();
+        var votosNao = votoRepository.findByPautaIdAndVote(id, NO.name()).size();
 
         return votoMapper.mapToResultado(votosSim, votosNao);
     }
 
+    private void validaCPF(String cpf, Pauta pauta) {
+
+        if (!votoRepository.findByCpfAndPauta(cpf, pauta).isEmpty()) {
+            throw new UnprocessableEntityException(MessageFormat.format("O usuário com o CPF: {0} já votou nesta pauta. Não é permitido votar mais de uma vez na mesma Pauta", cpf));
+        }
+    }
 }

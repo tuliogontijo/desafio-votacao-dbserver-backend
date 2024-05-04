@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("/v1/pautas")
 public class PautaController {
 
@@ -28,7 +29,7 @@ public class PautaController {
     PautaDto incluir(
             @RequestBody @Valid PautaInclusaoDto pautaInclusaoDto) {
 
-        log.info("Recebendo requisição para incluir pauta. Dados: {}", pautaInclusaoDto);
+        log.info("😎 Recebendo requisição para incluir pauta. Dados: {}", pautaInclusaoDto);
 
         var pauta = pautaService.incluir(pautaMapper.pautaInclusaoDtoToPauta(pautaInclusaoDto));
 
@@ -52,6 +53,7 @@ public class PautaController {
         return pautasDto;
     }
 
+    @CrossOrigin
     @PatchMapping("{id}/sessao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void abrirSessao(
