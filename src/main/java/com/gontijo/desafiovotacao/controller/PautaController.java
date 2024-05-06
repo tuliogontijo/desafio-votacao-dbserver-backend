@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class PautaController {
     PautaDto incluir(
             @RequestBody @Valid PautaInclusaoDto pautaInclusaoDto) {
 
-        log.info("😎 Recebendo requisição para incluir pauta. Dados: {}", pautaInclusaoDto);
+        log.info("Recebendo requisição para incluir pauta. Dados: {}", pautaInclusaoDto);
 
         var pauta = pautaService.incluir(pautaMapper.pautaInclusaoDtoToPauta(pautaInclusaoDto));
 
@@ -48,12 +49,14 @@ public class PautaController {
 
         var pautasDto = pautaMapper.pautaToListPautaDto(pautas);
 
+        Collections.sort(pautasDto);
+
         log.info("Pautas: {}", pautasDto);
 
         return pautasDto;
     }
 
-    @CrossOrigin
+    //@CrossOrigin
     @PatchMapping("{id}/sessao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void abrirSessao(

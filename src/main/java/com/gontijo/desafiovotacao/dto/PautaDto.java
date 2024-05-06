@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 //@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PautaDto {
+public class PautaDto implements Comparable<PautaDto> {
 
     Long id;
 
@@ -26,4 +26,10 @@ public class PautaDto {
     LocalDateTime createdAt;
 
     StatusSessaoPauta statusSession;
+
+    @Override
+    public int compareTo(PautaDto pautaDto) {
+        return Integer.compare(this.getStatusSession().getOrder(), pautaDto.getStatusSession().getOrder());
+
+    }
 }
