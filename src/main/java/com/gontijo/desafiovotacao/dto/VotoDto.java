@@ -19,5 +19,4 @@ public class VotoDto {
     LocalDateTime createdAt;
 
     Long pautaId;
-
 }

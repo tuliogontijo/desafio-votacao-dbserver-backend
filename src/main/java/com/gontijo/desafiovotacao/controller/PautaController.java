@@ -27,8 +27,7 @@ public class PautaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    PautaDto incluir(
-            @RequestBody @Valid PautaInclusaoDto pautaInclusaoDto) {
+    PautaDto incluir(@RequestBody @Valid PautaInclusaoDto pautaInclusaoDto) {
 
         log.info("Recebendo requisição para incluir pauta. Dados: {}", pautaInclusaoDto);
 
@@ -59,9 +58,7 @@ public class PautaController {
     //@CrossOrigin
     @PatchMapping("{id}/sessao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void abrirSessao(
-            @PathVariable Long id,
-            @RequestBody SessaoDto sessaoDto) {
+    void abrirSessao(@PathVariable Long id, @RequestBody SessaoDto sessaoDto) {
 
         log.info("Recebendo requisição para abrir sessão da pauta com ID:{}. Dados: {}", id, sessaoDto);
 
